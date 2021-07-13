@@ -163,7 +163,9 @@ DROP TABLE Buffet;
 ```
 
 ---
-# End of Basic SQL Tutorial
+End of summary - Basic
+
+Do help yourself with the [intermediate tutorial](#References) if you can't wait!
 ---
 
 # References
