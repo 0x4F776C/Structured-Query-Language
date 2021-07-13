@@ -69,7 +69,7 @@ The **create table** statement is used to create new table:
 ```sql
 # create "Buffet" table
 
-create table Buffet (Rank number(2), Name varchar(20), Price varchar(100), "Must Tries" varchar(60));
+create table Buffet (Ranking number(2), Name varchar(20), Price varchar(100), "Must Tries" varchar(60));
 ```
 
 #### Common Data Types
@@ -123,9 +123,9 @@ SELECT Name from Buffet
 The **insert** statement is used for inserting data in the database:
 
 ```sql
-# insert "Chun Hao Free Restaurant" with "Rank" of 7, "Price" of $0, and "Must Tries" of "Sashimi" in "Buffet" table
+# insert "Chun Hao Free Restaurant" with "Ranking" of 7, "Price" of $0, and "Must Tries" of "Sashimi" in "Buffet" table
 
-INSERT into Buffet (Rank, Name, Price, "Must Tries")
+INSERT into Buffet (Ranking, Name, Price, "Must Tries")
 	VALUES (7, "Chun Hao Free Restaurant", 0, "Sashimi");
 ```
 
@@ -138,7 +138,7 @@ The **update** statement is used for updating data in the database:
 
 UPDATE Buffet
 	SET Name = "Yi Qian Free Restaurant"
-	WHERE Rank = 7;
+	WHERE Ranking = 7;
 ```
 
 ### Deleting Data
@@ -146,10 +146,10 @@ UPDATE Buffet
 The **delete** statement is used to delete data in the database:
 
 ```sql
-# delete record where "Rank" is 7 from "Buffet" table
+# delete record where "Ranking" is 7 from "Buffet" table
 
 DELETE from Buffet
-	WHERE Rank = 7;
+	WHERE Ranking = 7;
 ```
 
 ### Drop Table
