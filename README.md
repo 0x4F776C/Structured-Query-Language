@@ -123,10 +123,10 @@ SELECT Name from Buffet
 The **insert** statement is used for inserting data in the database:
 
 ```sql
-# insert "Chun Hao Free Restaurant" with "Rank" of 7, "Price" of $0, and "Must Tries" of "His lovely shit" in "Buffet" table
+# insert "Chun Hao Free Restaurant" with "Rank" of 7, "Price" of $0, and "Must Tries" of "Sashimi" in "Buffet" table
 
 INSERT into Buffet (Rank, Name, Price, "Must Tries")
-	VALUES (7, "Chun Hao Free Restaurant", 0, "His lovely shit");
+	VALUES (7, "Chun Hao Free Restaurant", 0, "Sashimi");
 ```
 
 ### Updating Data
