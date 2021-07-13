@@ -1,5 +1,5 @@
 # Structured-Query-Language
-Can't wait for the SQL!
+Can't wait for the SQL of this movie!
 
 # Introduction to SQL
 
