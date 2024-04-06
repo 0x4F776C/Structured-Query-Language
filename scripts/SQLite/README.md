@@ -22,4 +22,6 @@ python3 SQLinjector.py --argument 4
 python3 SQLinjector.py --argument 5
 ```
 
+## Support by starring this repo. Thanks!
+
 # DO NOT USE THIS SCRIPT AGAINST UNAUTHORISED SYSTEM(S)
