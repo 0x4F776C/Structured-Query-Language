@@ -1,9 +1,17 @@
+'''
+Author: 0x4F776C
+GitHub: https://github.com/0x4F776C/Structured-Query-Language/tree/main/scripts/SQLite
+
+Note: perform a "pip install -r requirements.txt" to install all required imports before executing script
+'''
+
 import argparse
 import textwrap
 import requests
 import re
 
-url = 'http://cs2107-ctfd-i.comp.nus.edu.sg:8083/'
+url = 'http://127.0.0.1:8889/'
+#url = 'http://cs2107-ctfd-i.comp.nus.edu.sg:8083/'
 post_form = 'catbreed'
 headers = {
         'referrer': url + post_form,
