@@ -56,8 +56,8 @@ def getTableName():
                 table_dirty.append(dec_number - 1)
                 break
 
-    for flag in table_dirty:
-        table_clean.append(chr(flag))
+    for char in table_dirty:
+        table_clean.append(chr(char))
 
     delimiter = ''
     print(delimiter.join(table_clean))
@@ -86,8 +86,8 @@ def getColumnsName(table_name):
                 column_dirty.append(dec_number - 1)
                 break
 
-    for flag in column_dirty:
-        column_clean.append(chr(flag))
+    for char in column_dirty:
+        column_clean.append(chr(char))
 
     delimiter = ''
     print(delimiter.join(column_clean))
