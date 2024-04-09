@@ -164,7 +164,7 @@ def getColumnsName(table_name, end_offset, est_column_count):
 def getColumns(null_count, db_name):
     print('[*] Start...')
 
-    for i in range(0, null_count):
+    for i in range(0, int(null_count)):
         null = "NULL"
         if (i == 0):
             data = {
@@ -225,7 +225,7 @@ def choice(option):
     elif option == '4':
         null_count = input('Number of NULLs expected: ')
         db_name =  input('Database name: ')
-        getColumns(null_count=int(null_count), db_name=db_name)
+        getColumns(null_count=null_count, db_name=db_name)
     elif option == '5':
         table_name = input('Table name: ')
         end_offset = input('Ending offset of the flag: ')
