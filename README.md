@@ -1,6 +1,8 @@
 # Structured-Query-Language
 Can't wait for the SQL of this movie!
 
+<!-- display-subdirectories: false -->
+
 # Introduction to SQL
 
 *This document will contain all the basic knowledge needed to excel in your upcoming courses!*
